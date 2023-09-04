@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 
 export default class Profile extends Component {
@@ -27,6 +26,9 @@ export default class Profile extends Component {
     }));
   };
 
+
+  
+
   handlePasswordSubmit = (event) => {
     event.preventDefault();
     // Add password update logic here
@@ -39,6 +41,11 @@ export default class Profile extends Component {
       console.error('Passwords do not match');
     }
   }; 
+
+
+
+
+
 
   render() {
     const { firstName, lastName, email, isEditingPassword } = this.state;

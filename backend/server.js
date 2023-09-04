@@ -7,14 +7,27 @@ const jwt = require('jsonwebtoken'); // Add JWT library
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+
+
+
+
+
 // MongoDB Configuration (change the connection string as needed)
-mongoose.connect('mongodb://localhost:27017/voyagevue', {
+
+
+mongoose.connect('mongodb+srv://root1:root12@traficcongest.qfouane.mongodb.net/users?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+mongoose.connection.on('connected', () => {
+  console.log('Database is connected successfully');
+});
+
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
+
 
 // Define User model
 const User = mongoose.model('User', {
@@ -85,6 +98,10 @@ app.post('/api/login', async (req, res) => {
     return res.status(500).json({ message: 'Login failed.' });
   }
 });
+app.get('/', (req, res) => {
+    res.send("Here the server is waiting for you");
+  });
+  
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
