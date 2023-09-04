@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title> Map </title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <!--The div element for the map -->
+    
+    <form class="form">
+        <p class="form-title">Driving direction</p>
+         <div class="input-container">
+           <input placeholder="From" type="text">
+       </div>
+       <div class="input-container">
+           <input placeholder="To" type="text">
+         </div>
+          <button class="submit" type="submit">
+            Navigate
+       </button>
+    </form>
+    
+    <div id="map"></div>
+    
+  </body>
+</html>
