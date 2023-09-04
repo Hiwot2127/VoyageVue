@@ -1,7 +1,7 @@
 {
   "name": "voyagevue",
   "version": "0.1.0",
-  "private": true,
+  "private": true, 
   "dependencies": {
     "@react-google-maps/api": "^2.19.2",
     "@testing-library/jest-dom": "^5.17.0",
