@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/Signup';
 import Profile from './components/Profile';
-import voyageIcon from './images/voyage.png'
+import voyageIcon from './images/voyage.png' 
 import StreetViewMap from './components/Map';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
                 height="30"
                 className="me-2"
               />
-              VoyageVue Ethiopia
+              VoyageVue 
             </Link>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
               <ul className="navbar-nav ml-auto">

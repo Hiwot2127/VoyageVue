@@ -1,84 +1,88 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
-export default class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: '',
-      password: '',
-    }; 
-  }
+function Login() {
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
-  handleInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  const [state, setState] = React.useState({
+    email: '',
+    password: '',
+    error: '',
+  });
+
+  const handleInputChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { email, password } = state;
 
-    // Make a POST request to your backend for login
-    axios
-      .post('/api/login', { email, password })
-      .then((response) => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/login', { email, password });
+
+      if (response.data && response.data.message) {
         // Handle successful login
         console.log(response.data.message);
-        // Redirect or set authentication state as needed
-      })
-      .catch((error) => {
-        // Handle login error
-        console.error('Login failed:', error);
-      });
+        // Redirect to '/map' upon successful login
+        navigate('/map');
+      } else {
+        // Handle unexpected response format
+        console.error('Unexpected response format:', response);
+        setState({ ...state, error: 'An unexpected error occurred during login.' });
+      }
+    } catch (error) {
+      // Handle login error
+      console.error('Login failed:', error.response?.data?.message || error.message);
+      setState({ ...state, error: error.response?.data?.message || 'An error occurred during login.' });
+    }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <h3>Login To VoyageVue</h3>
-        <div className="mb-3">
-          <label>Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            placeholder="Enter email"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleInputChange}
-          />
+  return (
+    <form onSubmit={handleSubmit}>
+      <h3>Login To VoyageVue</h3>
+      <div className="mb-3">
+        <label>Email address</label>
+        <input
+          type="email"
+          className="form-control"
+          placeholder="Enter email"
+          name="email"
+          value={state.email}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="mb-3">
+        <label>Password</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Enter password"
+          name="password"
+          value={state.password}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="mb-3">
+        <div className="custom-control custom-checkbox">
+          <input type="checkbox" className="custom-control-input" id="customCheck1" />
+          <label className="custom-control-label" htmlFor="customCheck1">
+            Remember me
+          </label>
         </div>
-        <div className="mb-3">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleInputChange}
-          />
-        </div>
-        <div className="mb-3">
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customCheck1"
-            />
-            <label className="custom-control-label" htmlFor="customCheck1">
-              Remember me
-            </label>
-          </div>
-        </div>
-        <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
-      </form>
-    );
-  }
+      </div>
+      {state.error && <p className="error-message">{state.error}</p>}
+      <div className="d-grid">
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </div>
+      <p className="forgot-password text-right">
+        Forgot <a href="#">password?</a>
+      </p>
+    </form>
+  );
 }
+
+export default Login;

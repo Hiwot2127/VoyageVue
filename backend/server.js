@@ -64,6 +64,42 @@ app.post('/api/register', async (req, res) => {
 
 // Login endpoint (you can implement this separately)
 
+
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password.' });
+    }
+
+    // Implement your JWT token generation here if needed
+    // For example, using the 'jsonwebtoken' library:
+    // const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
+
+    return res.status(200).json({ message: 'Login successful', 
+    
+    /* token */ });
+  } catch (error) {
+    console.error('Login failed:', error);
+    return res.status(500).json({ message: 'Login failed.' });
+  }
+});
+
+
+// failureRedirect: '/login
+
+
+
+
 app.get('/', (req, res) => {
   res.send('Server is running and waiting for requests.');
 });
