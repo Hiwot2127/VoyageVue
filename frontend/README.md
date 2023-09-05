@@ -1,1 +1,1 @@
-#VoyageVue, Your Voyage Partner
+#VoyageVue - Your Voyage Partner
