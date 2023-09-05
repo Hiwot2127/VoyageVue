@@ -1,24 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Grid,
-  IconButton,
-  Input,
-  Skeleton,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, Grid, IconButton, TextField, Typography } from '@material-ui/core';
 import { LocationOn as LocationOnIcon, Close as CloseIcon } from '@material-ui/icons';
-import {
-  GoogleMap,
-  Marker,
-  Autocomplete,
-  DirectionsService,
-  DirectionsRenderer,
-} from '@react-google-maps/api';
+import { makeStyles } from '@material-ui/core/styles';
+import L from 'leaflet';
+
+// Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
 
 const center = { lat: 48.8584, lng: 2.2945 };
 
@@ -54,105 +41,77 @@ const useStyles = makeStyles((theme) => ({
 function Map() {
   const classes = useStyles();
   const [map, setMap] = useState(null);
-  const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
 
   const originRef = useRef(null);
   const destinationRef = useRef(null);
 
-  async function calculateRoute() {
-    if (!originRef.current || !destinationRef.current) {
-      return;
+  const routeCoordinates = [];
+  const markers = [];
+  let route = L.polyline(routeCoordinates, { color: 'blue' });
+
+  const myMap = L.map('map').setView([center.lat, center.lng], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(myMap);
+
+  myMap.on('click', function (event) {
+    // Extract latitude and longitude from the click event
+    const lat = event.latlng.lat;
+    const lng = event.latlng.lng;
+
+    if (routeCoordinates.length === 0) {
+      markers.forEach((marker) => myMap.removeLayer(marker));
+      myMap.removeLayer(route);
     }
 
-    const directionsService = new window.google.maps.DirectionsService();
-    const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destinationRef.current.value,
-      travelMode: window.google.maps.TravelMode.DRIVING,
-    });
+    markers.push(L.marker([lat, lng]).addTo(myMap));
+    routeCoordinates.push([lat, lng]);
 
-    setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
-  }
-
-  function clearRoute() {
-    setDirectionsResponse(null);
-    setDistance('');
-    setDuration('');
-    originRef.current.value = '';
-    destinationRef.current.value = '';
-  }
+    if (routeCoordinates.length === 2) {
+      route = L.polyline(routeCoordinates, { color: 'blue' }).addTo(myMap);
+    }
+  });
 
   return (
     <Grid container className={classes.root}>
-      <Box className={classes.mapContainer}>
-        {/* Google Map Box */}
-        <GoogleMap
-          center={center}
-          zoom={15}
-          mapContainerStyle={{ width: '100%', height: '100%' }}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
-          onLoad={(map) => setMap(map)}
-        >
-          <Marker position={center} />
-          {directionsResponse && (
-            <DirectionsRenderer directions={directionsResponse} />
-          )}
-        </GoogleMap>
-      </Box>
+      <Box className={classes.mapContainer} id="map"></Box>
       <Box
         p={4}
-        borderRadius='lg'
+        borderRadius="lg"
         m={4}
-        bgcolor='white'
+        bgcolor="white"
         boxShadow={2}
-        minWidth='container.md'
-        zIndex='1'
+        minWidth="container.md"
+        zIndex="1"
       >
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Autocomplete>
-              <TextField
-                className={classes.inputBox}
-                label='Origin'
-                inputRef={originRef}
-                variant='outlined'
-                fullWidth
-              />
-            </Autocomplete>
+            <TextField
+              className={classes.inputBox}
+              label="Origin"
+              inputRef={originRef}
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
           <Grid item xs={6}>
-            <Autocomplete>
-              <TextField
-                className={classes.inputBox}
-                label='Destination'
-                inputRef={destinationRef}
-                variant='outlined'
-                fullWidth
-              />
-            </Autocomplete>
+            <TextField
+              className={classes.inputBox}
+              label="Destination"
+              inputRef={destinationRef}
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
         </Grid>
         <Box className={classes.buttonGroup}>
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={calculateRoute}
-          >
+          <Button variant="contained" color="primary" onClick={() => {}}>
             Calculate Route
           </Button>
-          <IconButton
-            aria-label='clear-route'
-            onClick={clearRoute}
-          >
+          <IconButton aria-label="clear-route" onClick={() => {}}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -160,7 +119,7 @@ function Map() {
           <Typography>Distance: {distance}</Typography>
           <Typography>Duration: {duration}</Typography>
           <IconButton
-            aria-label='center-map'
+            aria-label="center-map"
             onClick={() => {
               map && map.panTo(center);
               map && map.setZoom(15);
