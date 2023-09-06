@@ -36,3 +36,41 @@
     transform: rotate(360deg);
   }
 }
+/* Add this CSS to your existing styles */
+@media (max-width: 768px) {
+  .navbar-collapse {
+    background-color: #fff; /* Background color for mobile menu */
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100%;
+    padding-top: 20px;
+    transition: all 0.3s;
+  }
+
+  .navbar-collapse.show {
+    right: 0;
+  }
+
+  .navbar-collapse ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .navbar-collapse li {
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  }
+
+  .navbar-toggler {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .navbar-toggler-icon {
+    cursor: pointer;
+  }
+}
+

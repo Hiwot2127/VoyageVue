@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -15,6 +15,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 const theme = createTheme();
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleNavbar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -31,7 +37,14 @@ function App() {
                 />
                 VoyageVue
               </Link>
-              <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+              <button
+                className="navbar-toggler"
+                type="button"
+                onClick={toggleNavbar}
+              >
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarTogglerDemo02">
                 <ul className="navbar-nav ml-auto">
                   <li className="nav-item">
                     <Link className="nav-link" to={'/sign-in'}>
@@ -71,8 +84,7 @@ function App() {
         </div>
       </Router>
     </ThemeProvider>
-  ); 
+  );
 }
- 
+
 export default App;
- 
