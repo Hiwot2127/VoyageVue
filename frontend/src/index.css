@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 body {
-  background: hwb(256 1% 3%) !important;
+  background: linear-gradient(to top right, #33ccff 0%, #9900cc 100%) !important;
   min-height: 100vh;
   display: flex;
   font-weight: 400;
@@ -19,7 +19,7 @@ body, html, .App, #root, .auth-wrapper {
 }
 .navbar-light {
   background-color: hsl(0, 0%, 100%);
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  box-shadow: 0px 14px 80px rgba(50, 53, 109, 0.2);
 }
 .auth-wrapper {
   display: flex;
@@ -58,5 +58,6 @@ body, html, .App, #root, .auth-wrapper {
   margin: 0;
 }
 .forgot-password a {
-  color: #167bff;
+  color:  hwb(256 1% 3%);
 }
+
