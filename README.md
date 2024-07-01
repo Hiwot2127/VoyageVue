@@ -6,7 +6,7 @@ Welcome to the VoyageVue GitHub repository! VoyageVue is a web-based application
 
 The repository is structured as follows:
 
-- `backend/`: This directory contains the backend code for VoyageVue. It includes the API endpoints, database models, and business logic implemented in Python using the django framework.
+- `backend/`: This directory contains the backend code for VoyageVue. It includes the API endpoints, database models, and business logic implemented in node using the Express framework.
 
 - `frontend/`: Here, you will find the frontend code for VoyageVue implemented using React and bootstrap. This directory also includes HTML, CSS, and JavaScript files for the user interface.
 
